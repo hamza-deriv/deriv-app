@@ -360,6 +360,14 @@ export default class TradersHubStore extends BaseStore {
                 : localize(
                       'Trade CFDs on MT5 with forex, stocks, stock indices, synthetics, cryptocurrencies, and commodities.'
                   );
+        const account_desc_swapfree =
+            !this.is_eu_user || this.is_demo_low_risk
+                ? localize(
+                      'Trade CFDs on MT5 with synthetics, forex, stocks, stock indices, cryptocurrencies and ETFs swap-free.'
+                  )
+                : localize(
+                      'Trade CFDs on MT5 with forex, stocks, stock indices, synthetics, cryptocurrencies, and commodities.'
+                  );
 
         const all_available_accounts = [
             ...getCFDAvailableAccount(),
@@ -370,6 +378,14 @@ export default class TradersHubStore extends BaseStore {
                 market_type: 'financial',
                 icon: !this.is_eu_user || this.is_demo_low_risk ? 'Financial' : 'CFDs',
                 availability: 'All',
+            },
+            {
+                name: !this.is_eu_user || this.is_demo_low_risk ? localize('Swap-Free') : localize('CFDs'),
+                description: account_desc_swapfree,
+                platform: CFD_PLATFORMS.MT5,
+                market_type: 'all',
+                icon: !this.is_eu_user || this.is_demo_low_risk ? 'SwapFree' : 'CFDs',
+                availability: 'Non-EU',
             },
         ];
         this.available_cfd_accounts = all_available_accounts.map(account => {
