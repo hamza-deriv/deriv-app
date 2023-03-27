@@ -21,6 +21,7 @@ const JurisdictionModal = ({
     openPasswordModal,
     real_synthetic_accounts_existing_data,
     real_financial_accounts_existing_data,
+    real_swapfree_accounts_existing_data,
     trading_platform_available_accounts,
     toggleJurisdictionModal,
     setJurisdictionSelectedShortcode,
@@ -71,6 +72,14 @@ const JurisdictionModal = ({
     const synthetic_available_accounts = trading_platform_available_accounts.filter(
         available_account =>
             available_account.market_type === 'gaming' &&
+            (show_eu_related_content
+                ? available_account.shortcode === 'maltainvest'
+                : available_account.shortcode !== 'maltainvest')
+    );
+
+    const swapfree_available_accounts = trading_platform_available_accounts.filter(
+        available_account =>
+            available_account.market_type === 'all' &&
             (show_eu_related_content
                 ? available_account.shortcode === 'maltainvest'
                 : available_account.shortcode !== 'maltainvest')
@@ -168,10 +177,12 @@ const JurisdictionModal = ({
                 is_virtual={is_virtual}
                 real_financial_accounts_existing_data={real_financial_accounts_existing_data}
                 real_synthetic_accounts_existing_data={real_synthetic_accounts_existing_data}
+                real_swapfree_accounts_existing_data={real_swapfree_accounts_existing_data}
                 jurisdiction_selected_shortcode={jurisdiction_selected_shortcode}
                 context={context}
                 setJurisdictionSelectedShortcode={setJurisdictionSelectedShortcode}
                 synthetic_available_accounts={synthetic_available_accounts}
+                swapfree_available_accounts={swapfree_available_accounts}
             />
             <div className={`cfd-jurisdiction-card--${account_type.type}__footer-wrapper`}>
                 <JurisdictionModalFootNote
@@ -256,6 +267,7 @@ export default connect(({ modules: { cfd }, ui, client, traders_hub }: RootStore
     jurisdiction_selected_shortcode: cfd.jurisdiction_selected_shortcode,
     real_financial_accounts_existing_data: cfd.real_financial_accounts_existing_data,
     real_synthetic_accounts_existing_data: cfd.real_synthetic_accounts_existing_data,
+    real_swapfree_accounts_existing_data: cfd.real_swapfree_accounts_existing_data,
     setAccountSettings: client.setAccountSettings,
     setJurisdictionSelectedShortcode: cfd.setJurisdictionSelectedShortcode,
     should_restrict_bvi_account_creation: client.should_restrict_bvi_account_creation,

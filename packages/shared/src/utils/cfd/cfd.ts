@@ -90,7 +90,7 @@ export const getCFDAccountKey = ({ market_type, sub_account_type, platform, shor
 
 type TGetAccountTypeFields = {
     category: 'real' | 'demo';
-    type: 'financial' | 'synthetic';
+    type: 'financial' | 'synthetic' | 'all';
 };
 
 type TAccountType = {
@@ -112,6 +112,9 @@ export const getAccountTypeFields = ({ category, type }: TGetAccountTypeFields) 
                 account_type: 'financial',
                 mt5_account_type: 'financial',
             },
+            all: {
+                account_type: 'all',
+            },
         },
         demo: {
             synthetic: {
@@ -120,6 +123,9 @@ export const getAccountTypeFields = ({ category, type }: TGetAccountTypeFields) 
             financial: {
                 account_type: 'demo',
                 mt5_account_type: 'financial',
+            },
+            all: {
+                account_type: 'demo',
             },
         },
     };
