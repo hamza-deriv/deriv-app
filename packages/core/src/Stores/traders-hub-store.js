@@ -455,6 +455,9 @@ export default class TradersHubStore extends BaseStore {
                 if (platform === CFD_PLATFORMS.MT5 && !this.is_eu_user && !maltainvest_account) {
                     return key.startsWith(`${platform}.${selected_account_type}.${market_type}`);
                 }
+                if (platform === CFD_PLATFORMS.MT5 && market_type === 'all') {
+                    return key.startsWith(`${platform}.${selected_account_type}.${platform}@${market_type}`);
+                }
                 if (platform === CFD_PLATFORMS.DXTRADE && market_type === 'all') {
                     return key.startsWith(`${platform}.${selected_account_type}.${platform}@${market_type}`);
                 }

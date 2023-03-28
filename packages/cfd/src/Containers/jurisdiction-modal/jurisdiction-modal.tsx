@@ -85,10 +85,19 @@ const JurisdictionModal = ({
                 : available_account.shortcode !== 'maltainvest')
     );
 
+    const getMT5Title = (type: string) => {
+        if (type === 'synthetic') {
+            return 'Derived';
+        }
+        if (type === 'all') {
+            return 'Swap-Free';
+        }
+        return 'Financial';
+    };
     const modal_title = show_eu_related_content
         ? localize('Jurisdiction for your Deriv MT5 CFDs account')
         : localize('Choose a jurisdiction for your MT5 {{account_type}} account', {
-              account_type: account_type.type === 'synthetic' ? 'Derived' : 'Financial',
+              account_type: getMT5Title(account_type.type),
           });
 
     const is_svg_selected = jurisdiction_selected_shortcode === 'svg';
@@ -99,14 +108,34 @@ const JurisdictionModal = ({
 
     const isNextButtonDisabled = () => {
         if (jurisdiction_selected_shortcode) {
-            const is_account_created =
-                account_type.type === 'synthetic'
-                    ? real_synthetic_accounts_existing_data?.some(
-                          account => account.landing_company_short === jurisdiction_selected_shortcode
-                      )
-                    : real_financial_accounts_existing_data?.some(
-                          account => account.landing_company_short === jurisdiction_selected_shortcode
-                      );
+            let is_account_created;
+
+            if (account_type.type === 'synthetic') {
+                is_account_created = real_synthetic_accounts_existing_data?.some(
+                    account => account.landing_company_short === jurisdiction_selected_shortcode
+                );
+            } else if (account_type.type === 'all') {
+                is_account_created = real_swapfree_accounts_existing_data?.some(
+                    account => account.landing_company_short === jurisdiction_selected_shortcode
+                );
+            } else {
+                is_account_created = real_financial_accounts_existing_data?.some(
+                    account => account.landing_company_short === jurisdiction_selected_shortcode
+                );
+            }
+
+            // const is_account_created =
+            //     account_type.type === 'synthetic'
+            //         ? real_synthetic_accounts_existing_data?.some(
+            //               account => account.landing_company_short === jurisdiction_selected_shortcode
+            //           )
+            //         : acount_type.type === 'all'
+            //         ? real_swapfree_accounts_existing_data?.some(
+            //               account => account.landing_company_short === jurisdiction_selected_shortcode
+            //           )
+            //         : real_financial_accounts_existing_data?.some(
+            //               account => account.landing_company_short === jurisdiction_selected_shortcode
+            //           );
 
             if (!is_account_created) {
                 if (

@@ -386,6 +386,24 @@ const CFDDashboard = (props: TCFDDashboardProps) => {
         );
     };
 
+    const isSwapFreeCardVisible = () => {
+        const { platform, landing_companies, is_logged_in } = props;
+
+        // const has_synthetic_account = hasAccount('real', 'synthetic');
+        // const has_financial_account = hasAccount('real', 'financial');
+
+        // if (!has_synthetic_account && !has_financial_account && platform === CFD_PLATFORMS.DXTRADE) return false;
+
+        return (
+            !is_logged_in ||
+            isLandingCompanyEnabled({
+                landing_companies,
+                platform,
+                type: 'all',
+            })
+        );
+    };
+
     const {
         account_status,
         beginRealSignupForMt5,
@@ -633,6 +651,7 @@ const CFDDashboard = (props: TCFDDashboardProps) => {
                                                 is_loading={is_loading}
                                                 isSyntheticCardVisible={isSyntheticCardVisible}
                                                 isFinancialCardVisible={isFinancialCardVisible}
+                                                isSwapFreeCardVisible={isSwapFreeCardVisible}
                                                 current_list={current_list}
                                                 onSelectAccount={createCFDAccount}
                                                 landing_companies={landing_companies}

@@ -39,7 +39,7 @@ type TGetCFDAccountKey = TGetAccount & {
 // *
 // sub_account_type financial_stp only happens in "financial" market_type
 export const getCFDAccountKey = ({ market_type, sub_account_type, platform, shortcode }: TGetCFDAccountKey) => {
-    if (market_type === 'all') {
+    if (market_type === 'all' && platform !== CFD_PLATFORMS.MT5) {
         return platform === CFD_PLATFORMS.DERIVEZ ? 'derivez' : 'dxtrade';
     }
 
@@ -76,6 +76,10 @@ export const getCFDAccountKey = ({ market_type, sub_account_type, platform, shor
                     return 'financial';
             }
         }
+    }
+    if (market_type === 'all' && platform === CFD_PLATFORMS.MT5) {
+        // currently we are only supporting SVG for SwapFree
+        return 'all_svg';
     }
     return undefined;
 };

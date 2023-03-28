@@ -287,6 +287,7 @@ export default class CFDStore extends BaseStore {
             phone,
             state: address_state,
             zipCode: address_postcode,
+            ...(this.account_type.type === 'all' ? { sub_account_category: 'swap_free' } : {}),
             ...(values.server ? { server: values.server } : {}),
             ...(this.jurisdiction_selected_shortcode ? { company: this.jurisdiction_selected_shortcode } : {}),
             ...(this.jurisdiction_selected_shortcode !== 'labuan'
