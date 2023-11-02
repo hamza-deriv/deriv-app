@@ -8,8 +8,8 @@ type TProps = {
     currency: THooks.WalletAccountsList['wallet_currency_type'];
     device?: 'desktop' | 'mobile';
     hasShine?: boolean;
-    isDemo?: boolean;
-    theme?: Omit<string, 'dark' | 'light'> | 'dark' | 'light';
+    isDemo?: THooks.WalletAccountsList['is_virtual'];
+    theme?: 'dark' | 'grey' | 'light';
     type?: 'card' | 'header';
 };
 
