@@ -92,7 +92,7 @@ const CompareAccountsTitleIcon = ({ isDemo, marketType, platform, shortCode }: T
                     )}
                 </div>
             </div>
-            <hr className='w-[213px] border-t-[5px] border-solid border-system-light-less-prominent-text' />
+            <hr className='w-[213px] border-solid border-system-light-less-prominent-text ml-1200' />
         </Fragment>
     );
 };

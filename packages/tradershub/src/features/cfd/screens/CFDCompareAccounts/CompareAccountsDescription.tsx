@@ -15,15 +15,15 @@ const CompareAccountsDescription = ({ isDemo, isEuRegion, marketType, shortCode 
     const jurisdictionData = getJurisdictionDescription(marketTypeShortCode ?? '');
 
     return (
-        <div className={qtMerge('max-h-[210px] lg:max-h-[245px]', isDemo && 'max-h-[9px]')}>
-            <div className='m-[9px]'>
+        <div className={qtMerge('max-h-[210px] lg:max-h-[220px] text-center', isDemo && 'max-h-[9px]')}>
+            <div className='m-[5px]'>
                 <Text bold size='xl'>
                     {'Up to'} {jurisdictionData.leverage}
                 </Text>
                 <Text size='sm'>{!isEuRegion ? jurisdictionData.leverage_description : 'Leverage'}</Text>
             </div>
             {!isEuRegion && (
-                <div className='m-[9px]'>
+                <div className='m-[5px]'>
                     <Text bold size='xl'>
                         {jurisdictionData.spread}
                     </Text>
@@ -32,19 +32,19 @@ const CompareAccountsDescription = ({ isDemo, isEuRegion, marketType, shortCode 
             )}
             {!isDemo && (
                 <Fragment>
-                    <div className='m-[9px]'>
+                    <div className='m-[5px]'>
                         <Text bold size='sm'>
                             {jurisdictionData.counterparty_company}
                         </Text>
                         <Text size='sm'>{jurisdictionData.counterparty_company_description}</Text>
                     </div>
-                    <div className='m-[9px]'>
+                    <div className='m-[5px]'>
                         <Text bold size='sm'>
                             {jurisdictionData.jurisdiction}
                         </Text>
                         <Text size='sm'>{jurisdictionData.jurisdiction_description}</Text>
                     </div>
-                    <div className='m-[9px]'>
+                    <div className='m-[5px]'>
                         <Text bold size='sm'>
                             {jurisdictionData.regulator}
                         </Text>
