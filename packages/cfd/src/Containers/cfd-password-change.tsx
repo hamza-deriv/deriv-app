@@ -30,6 +30,13 @@ type TOnSubmitPasswordChange = (
     actions: FormikHelpers<TCFDPasswordFormChangeValues>
 ) => Promise<void>;
 
+type TPasswordChecks = {
+    length: boolean;
+    specialCharacter: boolean;
+    uppercase: boolean;
+    lowercase: boolean;
+    number: boolean;
+};
 const CFDPasswordChange = observer(
     ({
         error_type,
@@ -56,11 +63,32 @@ const CFDPasswordChange = observer(
             return onForgotPassword();
         };
 
-        const validate = (values: FormikValues) => {
+        const [password, setPassword] = React.useState('');
+        const [passwordChecks, setPasswordChecks] = React.useState<TPasswordChecks>({
+            length: false,
+            specialCharacter: false,
+            uppercase: false,
+            lowercase: false,
+            number: false,
+        });
+
+        const validateNewPassword = (password: string) => {
+            return {
+                length: password.length >= 8 && password.length <= 16,
+                specialCharacter: /[!@#$%^&*()+\-=[\]{};':"|,.<>/?_~]/.test(password),
+                uppercase: /[A-Z]/.test(password),
+                lowercase: /[a-z]/.test(password),
+                number: /[0-9]/.test(password),
+            };
+        };
+
+        const validate = React.useCallback((values: FormikValues) => {
             const errors: FormikErrors<{
                 old_password: string;
                 new_password: string;
             }> = {};
+
+            setPassword(values.new_password);
 
             if (!values.old_password) {
                 errors.old_password = localize('This field is required');
@@ -72,7 +100,10 @@ const CFDPasswordChange = observer(
             if (validatePassword(values.new_password)) errors.new_password = validatePassword(values.new_password);
 
             return errors;
-        };
+        }, []);
+        React.useEffect(() => {
+            setPasswordChecks(validateNewPassword(password));
+        }, [password, validate]);
 
         const handleSubmit: TOnSubmitPasswordChange = async (values, actions) => {
             const response = await WS.tradingPlatformPasswordChange({
@@ -100,6 +131,18 @@ const CFDPasswordChange = observer(
                 onCancel();
             }
         };
+
+        const getPasswordStatus = (passwordChecks: boolean) => {
+            if (!password) {
+                return 'general';
+            } else if (passwordChecks) {
+                return 'green';
+            }
+            return 'red';
+        };
+
+        const Checkmark = () => <span>&#10003;</span>;
+        const CrossMark = () => <span>&#10007;</span>;
 
         return (
             <Formik
@@ -151,27 +194,41 @@ const CFDPasswordChange = observer(
                                 <div className='cfd-password-change__error-message'>
                                     <ol className='cfd-password-change-list-container'>
                                         <li className='cfd-password-change-list'>
-                                            <Text as='p' size='xs'>
+                                            <Text as='p' size='xs' color={getPasswordStatus(passwordChecks.length)}>
+                                                {password && passwordChecks.length && <Checkmark />}
+                                                {password && !passwordChecks.length && <CrossMark />}
                                                 <Localize i18n_default_text='8 to 16 characters' />
                                             </Text>
                                         </li>
                                         <li className='cfd-password-change-list'>
-                                            <Text as='p' size='xs'>
+                                            <Text
+                                                as='p'
+                                                size='xs'
+                                                color={getPasswordStatus(passwordChecks.specialCharacter)}
+                                            >
+                                                {password && passwordChecks.specialCharacter && <Checkmark />}
+                                                {password && !passwordChecks.specialCharacter && <CrossMark />}
                                                 <Localize i18n_default_text='A special character such as ( _ @ ? ! / # )' />
                                             </Text>
                                         </li>
                                         <li className='cfd-password-change-list'>
-                                            <Text as='p' size='xs'>
+                                            <Text as='p' size='xs' color={getPasswordStatus(passwordChecks.uppercase)}>
+                                                {password && passwordChecks.uppercase && <Checkmark />}
+                                                {password && !passwordChecks.uppercase && <CrossMark />}
                                                 <Localize i18n_default_text='An uppercase letter' />
                                             </Text>
                                         </li>
                                         <li className='cfd-password-change-list'>
-                                            <Text as='p' size='xs'>
+                                            <Text as='p' size='xs' color={getPasswordStatus(passwordChecks.lowercase)}>
+                                                {password && passwordChecks.lowercase && <Checkmark />}
+                                                {password && !passwordChecks.lowercase && <CrossMark />}
                                                 <Localize i18n_default_text='An lowercase letter' />
                                             </Text>
                                         </li>
                                         <li className='cfd-password-change-list'>
-                                            <Text as='p' size='xs'>
+                                            <Text as='p' size='xs' color={getPasswordStatus(passwordChecks.number)}>
+                                                {password && passwordChecks.number && <Checkmark />}
+                                                {password && !passwordChecks.number && <CrossMark />}
                                                 <Localize i18n_default_text='A number' />
                                             </Text>
                                         </li>
